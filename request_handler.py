@@ -8,6 +8,7 @@ from views import (
     delete_animal,
     update_animal,
     get_animals_by_location,
+    get_animals_by_status,
 )
 from views import (
     get_all_locations,
@@ -115,6 +116,8 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = get_animals_by_location(query["location_id"][0])
             if query.get("location_id") and resource == "employees":
                 response = get_employees_by_location(query["location_id"][0])
+            if query.get("status") and resource == "animals":
+                response = get_animals_by_status(query["status"][0])
 
         self.wfile.write(json.dumps(response).encode())
 
