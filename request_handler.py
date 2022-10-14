@@ -22,6 +22,7 @@ from views import (
     create_employee,
     delete_employee,
     update_employee,
+    get_employees_by_location,
 )
 from views import (
     get_all_customers,
@@ -112,6 +113,8 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = get_customers_by_email(query["email"][0])
             if query.get("location_id") and resource == "animals":
                 response = get_animals_by_location(query["location_id"][0])
+            if query.get("location_id") and resource == "employees":
+                response = get_employees_by_location(query["location_id"][0])
 
         self.wfile.write(json.dumps(response).encode())
 

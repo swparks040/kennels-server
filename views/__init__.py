@@ -19,6 +19,7 @@ from .employee_requests import (
     create_employee,
     delete_employee,
     update_employee,
+    get_employees_by_location,
 )
 from .customer_requests import (
     get_all_customers,

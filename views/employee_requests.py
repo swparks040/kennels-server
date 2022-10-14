@@ -2,12 +2,8 @@ import json
 import sqlite3
 from models import Employee
 
-EMPLOYEES = [
-    {
-        "id": 1,
-        "name": "Jenna Solis"
-    }
-]
+EMPLOYEES = [{"id": 1, "name": "Jenna Solis"}]
+
 
 def get_all_employees():
     # Open a connection to the database
@@ -20,7 +16,9 @@ def get_all_employees():
             """
         SELECT
             a.id,
-            a.name
+            a.name,
+            a.address,
+            a.location_id
         FROM employee a
         """
         )
@@ -35,13 +33,14 @@ def get_all_employees():
             # exact order of the parameters defined in the
             # employee class above.
             employee = Employee(
-                row["id"],
-                row["name"]
+                row["id"], row["name"], row["address"], row["location_id"]
             )
 
             employees.append(employee.__dict__)
 
     return employees
+
+
 def get_single_employee(id):
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -49,21 +48,61 @@ def get_single_employee(id):
 
         # Use a ? parameter to inject a variable's value
         # into the SQL statement.
-        db_cursor.execute("""
+        db_cursor.execute(
+            """
         SELECT
             a.id,
-            a.name
+            a.name,
+            a.address,
+            a.location_id
         FROM employee a
         WHERE a.id = ?
-        """, ( id, ))
+        """,
+            (id,),
+        )
 
         # Load the single result into memory
         data = db_cursor.fetchone()
 
         # Create an employee instance from the current row
-        employee = Employee(data['id'], data['name'])
+        employee = Employee(
+            data["id"], data["name"], data["address"], data["location_id"]
+        )
 
         return employee.__dict__
+
+
+def get_employees_by_location(location_id):
+
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+        select
+            a.id,
+            a.name,
+            a.address,
+            a.location_id
+        from Employee a
+        WHERE a.location_id = ?
+        """,
+            (location_id,),
+        )
+
+        employees = []
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+            employee = Employee(
+                row["id"], row["name"], row["address"], row["location_id"]
+            )
+            employees.append(employee.__dict__)
+
+    return employees
+
 
 def create_employee(employee):
     # Get the id value of the last employee in the list
@@ -81,6 +120,7 @@ def create_employee(employee):
     # Return the dictionary with `id` property added
     return employee
 
+
 def delete_employee(id):
     # Initial -1 value for employee index, in case one isn't found
     employee_index = -1
@@ -95,6 +135,7 @@ def delete_employee(id):
     # If the employee was found, use pop(int) to remove it from list
     if employee_index >= 0:
         EMPLOYEES.pop(employee_index)
+
 
 def update_employee(id, new_employee):
     # Iterate the employeeS list, but use enumerate() so that
