@@ -51,7 +51,8 @@ def get_all_locations():
 
             locations.append(location.__dict__)
 
-    return locations
+    return json.dumps(locations)
+
 def get_single_location(id):
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -74,7 +75,7 @@ def get_single_location(id):
         # Create an location instance from the current row
         location = Location(data['id'], data['name'], data['address'])
 
-        return location.__dict__
+        return json.dumps(location.__dict__)
 
 def create_location(location):
     # Get the id value of the last location in the list

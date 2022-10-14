@@ -38,7 +38,7 @@ def get_all_employees():
 
             employees.append(employee.__dict__)
 
-    return employees
+    return json.dumps(employees)
 
 
 def get_single_employee(id):
@@ -69,7 +69,7 @@ def get_single_employee(id):
             data["id"], data["name"], data["address"], data["location_id"]
         )
 
-        return employee.__dict__
+        return json.dumps(employee.__dict__)
 
 
 def get_employees_by_location(location_id):
@@ -101,7 +101,7 @@ def get_employees_by_location(location_id):
             )
             employees.append(employee.__dict__)
 
-    return employees
+    return json.dumps(employees)
 
 
 def create_employee(employee):

@@ -58,7 +58,7 @@ def get_all_animals():
 
             animals.append(animal.__dict__)
 
-    return animals
+    return json.dumps(animals)
 
 
 # Function with a single parameter
@@ -97,14 +97,15 @@ def get_single_animal(id):
             data["customer_id"],
         )
 
-        return animal.__dict__
+        return json.dumps(animal.__dict__)
 
 
 def get_animals_by_location(location_id):
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-        db_cursor.execute("""
+        db_cursor.execute(
+            """
         select
             a.id,
             a.name,
@@ -114,7 +115,9 @@ def get_animals_by_location(location_id):
             a.customer_id
         from Animal a
         WHERE a.location_id = ?
-        """, (location_id, ))
+        """,
+            (location_id,),
+        )
         animals = []
         dataset = db_cursor.fetchall()
         for row in dataset:
@@ -128,13 +131,15 @@ def get_animals_by_location(location_id):
             )
             animals.append(animal.__dict__)
 
-    return animals
+    return json.dumps(animals)
+
 
 def get_animals_by_status(status):
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-        db_cursor.execute("""
+        db_cursor.execute(
+            """
         select
             a.id,
             a.name,
@@ -144,7 +149,9 @@ def get_animals_by_status(status):
             a.customer_id
         from Animal a
         WHERE a.status = ?
-        """, (status, ))
+        """,
+            (status,),
+        )
         animals = []
         dataset = db_cursor.fetchall()
         for row in dataset:
@@ -158,7 +165,7 @@ def get_animals_by_status(status):
             )
             animals.append(animal.__dict__)
 
-    return animals
+    return json.dumps(animals)
 
 
 def create_animal(animal):
@@ -179,19 +186,16 @@ def create_animal(animal):
 
 
 def delete_animal(id):
-    # Initial -1 value for animal index, in case one isn't found
-    animal_index = -1
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
 
-    # Iterate the ANIMALS list, but use enumerate() so that you
-    # can access the index value of each item
-    for index, animal in enumerate(ANIMALS):
-        if animal["id"] == id:
-            # Found the animal. Store the current index.
-            animal_index = index
-
-    # If the animal was found, use pop(int) to remove it from list
-    if animal_index >= 0:
-        ANIMALS.pop(animal_index)
+        db_cursor.execute(
+            """
+        DELETE FROM animal
+        WHERE id = ?
+        """,
+            (id,),
+        )
 
 
 def update_animal(id, new_animal):

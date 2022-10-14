@@ -119,7 +119,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             if query.get("status") and resource == "animals":
                 response = get_animals_by_status(query["status"][0])
 
-        self.wfile.write(json.dumps(response).encode())
+        self.wfile.write((response).encode())
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.

@@ -40,7 +40,7 @@ def get_all_customers():
 
             customers.append(customer.__dict__)
 
-    return customers
+    return json.dumps(customers)
 
 
 def get_single_customer(id):
@@ -76,7 +76,7 @@ def get_single_customer(id):
             data["password"],
         )
 
-        return customer.__dict__
+        return json.dumps(customer.__dict__)
 
 
 def get_customers_by_email(email):
@@ -109,7 +109,7 @@ def get_customers_by_email(email):
             )
             customers.append(customer.__dict__)
 
-    return customers
+    return json.dumps(customers)
 
 
 def create_customer(customer):
