@@ -5,48 +5,19 @@ DATABASE = {
             "name": "Snickers",
             "species": "Dog",
             "locationId": 1,
-            "customerId": 4
+            "customerId": 4,
         },
-        {
-            "id": 2,
-            "name": "Roman",
-            "species": "Dog",
-            "locationId": 1,
-            "customerId": 2
-        },
-        {
-            "id": 3,
-            "name": "Blue",
-            "species": "Cat",
-            "locationId": 2,
-            "customerId": 1
-        }
+        {"id": 2, "name": "Roman", "species": "Dog", "locationId": 1, "customerId": 2},
+        {"id": 3, "name": "Blue", "species": "Cat", "locationId": 2, "customerId": 1},
     ],
-    "customers": [
-        {
-            "id": 1,
-            "name": "Jenna Solis"
-        }
-    ],
-    "employees": [
-        {
-            "id": 1,
-            "name": "Jenna Solis"
-        }
-    ],
+    "customers": [{"id": 1, "name": "Jenna Solis"}],
+    "employees": [{"id": 1, "name": "Jenna Solis"}],
     "locations": [
-        {
-            "id": 1,
-            "name": "Nashville North",
-            "address": "8422 Johnson Pike"
-        },
-        {
-            "id": 2,
-            "name": "Nashville South",
-            "address": "209 Emory Drive"
-        }
-    ]
+        {"id": 1, "name": "Nashville North", "address": "8422 Johnson Pike"},
+        {"id": 2, "name": "Nashville South", "address": "209 Emory Drive"},
+    ],
 }
+
 
 def all(resource):
     """For GET requests to collection"""
@@ -70,7 +41,6 @@ def retrieve(resource, id):
                 requested_data.pop("customerId", None)
     return requested_data
 
-
 def create(resource, new_data):
     """For POST requests to a collection"""
     max_id = DATABASE[resource][-1]["id"]
@@ -79,16 +49,23 @@ def create(resource, new_data):
     DATABASE[resource].append(new_data)
     return new_data
 
-
 def update(resource, id, edited_data):
     """For PUT requests to a single resource"""
     for index, data in enumerate(DATABASE[resource]):
         if data["id"] == id:
             DATABASE[resource][index] = edited_data
             break
-    return ""
+    return edited_data
 
-
-def delete():
+def delete(resource, id):
     """For DELETE requests to a single resource"""
-    return ""
+    data_index = -1
+    # Iterate the ANIMALS list, but use enumerate() so that you
+    # can access the index value of each item
+    for index, data in enumerate(DATABASE[resource]):
+        if data["id"] == id:
+            # Found the data. Store the current index.
+            data_index = index
+    # If the animal was found, use pop(int) to remove it from list
+    if data_index >= 0:
+        DATABASE[resource].pop(data_index)

@@ -29,23 +29,11 @@ from views import (
 )
 
 method_mapper = {
-    "animals": {
-        "single": get_single_animal,
-        "all": get_all_animals
-    },
-    "locations": {
-        "single": get_single_location,
-        "all": get_all_locations
-    },
-    "employees": {
-        "single": get_single_employee,
-        "all": get_all_employees
-    },
-    "customers": {
-        "single": get_single_customer,
-        "all": get_all_customers
-    }
- }
+    "animals": {"single": get_single_animal, "all": get_all_animals},
+    "locations": {"single": get_single_location, "all": get_all_locations},
+    "employees": {"single": get_single_employee, "all": get_all_employees},
+    "customers": {"single": get_single_customer, "all": get_all_customers},
+}
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
 # work together for a common purpose. In this case, that
@@ -85,12 +73,13 @@ class HandleRequests(BaseHTTPRequestHandler):
                 self._set_headers(200)
             else:
                 self._set_headers(404)
-                response = ''
+                response = ""
         else:
             self._set_headers(200)
             response = method_mapper[resource]["all"]()
 
         return response
+
     # Here's a method on the class that overrides the parent's method.
     # It handles any GET request.
     def do_GET(self):
@@ -98,64 +87,6 @@ class HandleRequests(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url(self.path)
         response = self.get_all_or_single(resource, id)
         self.wfile.write(json.dumps(response).encode())
-    
-    # def do_GET(self):
-    #     # self._set_headers(200)
-    #     response = {}  # Default response
-    #     # Parse the URL and capture the tuple that is returned
-    #     (resource, id) = self.parse_url(self.path)
-    #     if resource == "animals":
-    #         if id is not None:
-    #             response = get_single_animal(id)
-    #             if response is not None:
-    #                 self._set_headers(200)
-
-    #             else:
-    #                 self._set_headers(404)
-    #                 response = {
-    #                     "message": f"I hate your request and will not go get animal {id}."
-    #                 }
-    #         else:
-    #             response = get_all_animals()
-    #     if resource == "locations":
-    #         if id is not None:
-    #             response = get_single_location(id)
-    #             if response is not None:
-    #                 self._set_headers(200)
-
-    #             else:
-    #                 self._set_headers(404)
-    #                 response = {
-    #                     "message": f"Location {id} is currently under construction. Please try again later."
-    #                 }
-    #         else:
-    #             response = get_all_locations()
-    #     if resource == "employees":
-    #         if id is not None:
-    #             response = get_single_employee(id)
-    #             if response is not None:
-    #                 self._set_headers(200)
-
-    #             else:
-    #                 self._set_headers(404)
-    #                 response = {"message": f"Employee {id} has been fired."}
-    #         else:
-    #             response = get_all_employees()
-
-    #     if resource == "customers":
-    #         if id is not None:
-    #             response = get_single_customer(id)
-    #             if response is not None:
-    #                 self._set_headers(200)
-
-    #             else:
-    #                 self._set_headers(404)
-    #                 response = {"message": f"Customer {id} does not exist."}
-
-    #         else:
-    #             response = get_all_customers()
-
-        
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
@@ -168,7 +99,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         post_body = json.loads(post_body)
 
         # Parse the URL
-        (resource, id) = self.parse_url(self.path)
+        (resource) = self.parse_url(self.path)
 
         # Initialize new animal
         new_animal = None
