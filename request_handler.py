@@ -105,6 +105,16 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_customer(id)}"
                 else:
                     response = f"{get_all_customers()}"
+            elif resource == "locations":
+                if id is not None:
+                    response = f"{get_single_location(id)}"
+                else:
+                    response = f"{get_all_locations()}"
+            elif resource == "employees":
+                if id is not None:
+                    response = f"{get_single_employee(id)}"
+                else:
+                    response = f"{get_all_employees()}"
 
         else:  # There is a ? in the path, run the query param functions
             (resource, query) = parsed
@@ -119,7 +129,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             if query.get("status") and resource == "animals":
                 response = get_animals_by_status(query["status"][0])
 
-        self.wfile.write((response).encode())
+        self.wfile.write(response.encode())
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.

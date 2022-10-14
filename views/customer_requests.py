@@ -15,13 +15,13 @@ def get_all_customers():
         db_cursor.execute(
             """
         SELECT
-            a.id,
-            a.name, 
-            a.address,
-            a.email,
-            a.password
+            c.id,
+            c.name,
+            c.address,
+            c.email,
+            c.password
 
-        FROM customer a
+        FROM customer c
         """
         )
         # Initialize an empty list to hold all customer representations
@@ -35,7 +35,7 @@ def get_all_customers():
             # exact order of the parameters defined in the
             # customer class above.
             customer = Customer(
-                row["id"], row["name"], row["address"], row["email"], row["password"]
+                row['id'], row['name'], row['address'], row['email'], row['password']
             )
 
             customers.append(customer.__dict__)
@@ -53,13 +53,13 @@ def get_single_customer(id):
         db_cursor.execute(
             """
         SELECT
-            a.id,
-            a.name,
-            a.address,
-            a.email,
-            a.password
-        FROM customer a
-        WHERE a.id = ?
+            c.id,
+            c.name,
+            c.address,
+            c.email,
+            c.password
+        FROM customer c
+        WHERE c.id = ?
         """,
             (id,),
         )
@@ -69,11 +69,11 @@ def get_single_customer(id):
 
         # Create an customer instance from the current row
         customer = Customer(
-            data["id"],
-            data["name"],
-            data["address"],
-            data["email"],
-            data["password"],
+            data['id'],
+            data['name'],
+            data['address'],
+            data['email'],
+            data['password'],
         )
 
         return json.dumps(customer.__dict__)
@@ -105,7 +105,7 @@ def get_customers_by_email(email):
 
         for row in dataset:
             customer = Customer(
-                row["id"], row["name"], row["address"], row["email"], row["password"]
+                row['id'], row['name'], row['address'], row['email'], row['password']
             )
             customers.append(customer.__dict__)
 
