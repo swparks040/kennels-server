@@ -75,7 +75,8 @@ WHERE a.id = 4
 
 SELECT
     a.id,
-    a.name
+    a.name,
+	a.address
 FROM customer a
 WHERE a.id = 2
 

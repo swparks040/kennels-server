@@ -7,6 +7,7 @@ from views import (
     create_animal,
     delete_animal,
     update_animal,
+    get_animals_by_location,
 )
 from views import (
     get_all_locations,
@@ -27,7 +28,7 @@ from views import (
     get_single_customer,
     create_customer,
     update_customer,
-    get_customers_by_email
+    get_customers_by_email,
 )
 
 method_mapper = {
@@ -48,7 +49,7 @@ class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
         """Parse the url into the resource and id"""
         parsed_url = urlparse(path)
-        path_params = parsed_url.path.split('/')  # ['', 'animals', 1]
+        path_params = parsed_url.path.split("/")  # ['', 'animals', 1]
         resource = path_params[1]
 
         if parsed_url.query:
@@ -89,8 +90,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         parsed = self.parse_url(self.path)
 
         # If the path does not include a query parameter, continue with the original if block
-        if '?' not in self.path:
-            ( resource, id ) = parsed
+        if "?" not in self.path:
+            (resource, id) = parsed
 
             if resource == "animals":
                 if id is not None:
@@ -103,12 +104,14 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_customers()}"
 
-        else: # There is a ? in the path, run the query param functions
+        else:  # There is a ? in the path, run the query param functions
             (resource, query) = parsed
 
             # see if the query dictionary has an email key
-            if query.get('email') and resource == 'customers':
-                response = get_customers_by_email(query['email'][0])
+            if query.get("email") and resource == "customers":
+                response = get_customers_by_email(query["email"][0])
+            if query.get("location_id") and resource == "animals":
+                response = get_animals_by_location(query["location_id"][0])
 
         self.wfile.write(json.dumps(response).encode())
 
