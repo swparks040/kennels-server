@@ -21,7 +21,7 @@ def get_all_customers():
             c.email,
             c.password
 
-        FROM customer c
+        FROM Customer c
         """
         )
         # Initialize an empty list to hold all customer representations
@@ -58,7 +58,7 @@ def get_single_customer(id):
             c.address,
             c.email,
             c.password
-        FROM customer c
+        FROM Customer c
         WHERE c.id = ?
         """,
             (id,),
@@ -88,7 +88,7 @@ def get_customers_by_email(email):
         # Write the SQL query to get the information you want
         db_cursor.execute(
             """
-        select
+        SELECT
             c.id,
             c.name,
             c.address,

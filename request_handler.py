@@ -142,7 +142,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         post_body = json.loads(post_body)
 
         # Parse the URL
-        (resource) = self.parse_url(self.path)
+        (resource, pk) = self.parse_url(self.path)
 
         # Initialize new animal
         new_animal = None
@@ -155,7 +155,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "animals":
             if (
                 "name" in post_body
-                and "species" in post_body
+                and "breed" in post_body
+                and "status" in post_body
                 and "locationId" in post_body
                 and "customerId" in post_body
             ):
@@ -164,7 +165,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             else:
                 self._set_headers(400)
                 new_animal = {
-                    "message": f'{"name is required" if "name" not in post_body else ""} {"species is required" if "species" not in post_body else ""} {"locationId is required" if "locationId" not in post_body else ""} {"customerId is required" if "customerId" not in post_body else ""}'
+                    "message": f'{"name is required" if "name" not in post_body else ""} {"breed is required" if "breed" not in post_body else ""}{"status is required" if "status" not in post_body else ""} {"locationId is required" if "locationId" not in post_body else ""} {"customerId is required" if "customerId" not in post_body else ""}'
                 }
 
             # Encode the new animal and send in response
